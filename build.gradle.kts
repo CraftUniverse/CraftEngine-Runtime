@@ -2,7 +2,7 @@ plugins {
     id("java")
 }
 
-group = "net.craftuniverse.engine"
+group = "net.craftengine"
 version = "1.0-SNAPSHOT"
 
 repositories {
