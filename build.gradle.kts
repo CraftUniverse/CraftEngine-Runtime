@@ -18,6 +18,9 @@ dependencies {
     implementation("ch.qos.logback:logback-core:1.5.16")
     implementation("ch.qos.logback:logback-classic:1.5.16")
 
+    // TCP Communication
+    implementation("com.google.protobuf:protobuf-java:4.29.3")
+
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
