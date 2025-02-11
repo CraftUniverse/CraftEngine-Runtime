@@ -1,6 +1,7 @@
 plugins {
     id("java")
     id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("net.kyori.blossom") version "1.3.1"
 }
 
 group = "net.craftengine"
@@ -23,4 +24,14 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+blossom {
+    val gitFile = "src/main/java/net/craftengine/runtime/debug/Git.java"
+
+    val gitCommit = System.getenv("GIT_COMMIT")
+    val gitBranch = System.getenv("GIT_BRANCH")
+
+    replaceToken("\"%COMMIT%\"", if (gitCommit == null) "null" else "\"${gitCommit}\"", gitFile)
+    replaceToken("\"%BRANCH%\"", if (gitBranch == null) "null" else "\"${gitBranch}\"", gitFile)
 }
