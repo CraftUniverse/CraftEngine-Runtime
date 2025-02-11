@@ -10,7 +10,7 @@
     </appender>
 
     <appender name="FILE_LATEST" class="ch.qos.logback.core.FileAppender">
-        <file>logs/game.latest.log</file>
+        <file>logs/latest.log</file>
         <append>false</append>
 
         <encoder>
@@ -19,7 +19,7 @@
     </appender>
 
     <appender name="FILE_TIME" class="ch.qos.logback.core.FileAppender">
-        <file>logs/game.${FILENAME}.log</file>
+        <file>logs/${FILENAME}.log</file>
 
         <encoder>
             <pattern>${ENCODER_PATTERN}</pattern>
