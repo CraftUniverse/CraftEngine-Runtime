@@ -1,0 +1,34 @@
+<configuration>
+    <conversionRule conversionWord="highlightex" converterClass="net.craftengine.runtime.debug.LogbackHightlight"/>
+    <property name="ENCODER_PATTERN" value="%highlightex(%d{HH:mm:ss.SSS} %-6level %logger - %msg%n)"/>
+    <timestamp key="FILENAME" datePattern="yyyy-MM-dd.HH_mm_ss"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${ENCODER_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE_LATEST" class="ch.qos.logback.core.FileAppender">
+        <file>logs/game.latest.log</file>
+        <append>false</append>
+
+        <encoder>
+            <pattern>${ENCODER_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE_TIME" class="ch.qos.logback.core.FileAppender">
+        <file>logs/game.${FILENAME}.log</file>
+
+        <encoder>
+            <pattern>${ENCODER_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE_TIME"/>
+        <appender-ref ref="FILE_LATEST"/>
+    </root>
+</configuration>
