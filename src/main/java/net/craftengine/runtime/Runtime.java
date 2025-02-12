@@ -48,10 +48,14 @@ public class Runtime {
 
         IPCLogicCommunication.init();
 
+        var shortCommit = Git.commit() == null ? null : Git.commit().substring(0, 6);
+
         logger.info("Server Port: {}", MINECRAFT_PORT);
-        logger.info("Runtime commit \"{}\" on branch \"{}\"", Git.commit(), Git.branch());
+        logger.info("Runtime commit \"{}\" on branch \"{}\"", shortCommit, Git.branch());
 
         MinecraftServer server = MinecraftServer.init();
+
+        MinecraftServer.setBrandName("CraftEngine Runtime " + shortCommit + "@" + Git.branch());
 
         // Check if the application is not in offline mode
         if (!OFFLINE_MODE) {
@@ -59,6 +63,8 @@ public class Runtime {
         } else {
             logger.warn("Server is Running in offline mode!");
         }
+
+        logger.info("Minecraft Version: {} | P: {} | D: {}", MinecraftServer.VERSION_NAME, MinecraftServer.PROTOCOL_VERSION, MinecraftServer.DATA_VERSION);
 
         server.start("0.0.0.0", MINECRAFT_PORT);
     }
