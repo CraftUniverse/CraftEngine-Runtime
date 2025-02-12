@@ -30,17 +30,18 @@ public class PosixSharedMemory {
         buffer = ptr.getByteBuffer(0, SHM_SIZE);
     }
 
-    public void write(String message) {
+    public void write(byte[] data) {
         buffer.clear();
-        buffer.put(message.getBytes());
+        buffer.put(data);
         buffer.put((byte) 0); // Null-Termination
     }
 
-    public String read() {
+    public byte[] read() {
         byte[] data = new byte[SHM_SIZE];
         buffer.position(0);
         buffer.get(data);
-        return new String(data).trim();
+
+        return data;
     }
 
     public Pointer ptr() {
