@@ -1,6 +1,7 @@
 package net.craftengine.runtime;
 
 import net.craftengine.runtime.debug.Git;
+import net.craftengine.runtime.ipc.IPCLogicCommunication;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.MojangAuth;
 import org.slf4j.Logger;
@@ -28,6 +29,8 @@ public class Runtime {
 
             argIndex++;
         }
+
+        IPCLogicCommunication.init();
 
         logger.info("Server Port: {}", MINECRAFT_PORT);
         logger.info("Runtime commit \"{}\" on branch \"{}\"", Git.commit(), Git.branch());
