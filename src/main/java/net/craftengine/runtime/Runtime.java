@@ -7,15 +7,17 @@ import net.minestom.server.extras.MojangAuth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 public class Runtime {
     public static int MINECRAFT_PORT = 25565;
     public static boolean OFFLINE_MODE = false;
     public static String SHM_NAME = "CELogic";
-    public static int SHM_SIZE = 1024;
+    public static int SHM_SIZE = 1026;
 
     private static Logger logger = LoggerFactory.getLogger(Runtime.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         int argIndex = 0;
 
         // Parse command line arguments
@@ -31,7 +33,7 @@ public class Runtime {
                 System.out.println("--shm_name | -shmn <string>");
                 System.out.println("    Set's the Shared Memory Name (default: CELogic)");
                 System.out.println("--shm_size | -shms <int32>");
-                System.out.println("    Set's the Shared Memory Size (default: 1024)");
+                System.out.println("    Set's the Shared Memory Size (default: 1026)");
                 return;
             } else if (arg.equalsIgnoreCase("--minecraft_port") || arg.equalsIgnoreCase("-mp")) {
                 MINECRAFT_PORT = Integer.parseInt(args[argIndex + 1]);

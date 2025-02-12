@@ -1,6 +1,7 @@
 package net.craftengine.runtime.ipc;
 
 import com.sun.jna.Pointer;
+import org.msgpack.core.MessagePack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,11 +68,25 @@ public class WindowsSharedMemory {
 
                     // TODO: Handle data
 
-
                     if (!Arrays.equals(lastData, data)) {
                         lastData = data;
 
+                        byte[] packedData = new byte[SHM_SIZE - 2];
+
+                        int x = 0;
+
                         System.out.println(Arrays.toString(data));
+
+                        while (x <= packedData.length - 1) {
+                            packedData[x] = data[x + 2];
+                            x++;
+                        }
+
+                        var unpacker = MessagePack.newDefaultUnpacker(packedData);
+
+                        System.out.println("order: " + Byte.toUnsignedInt(data[0]));
+                        System.out.println("dest: " + Byte.toUnsignedInt(data[1]));
+                        System.out.println(unpacker.unpackString());
                     }
 
                     lock.readLock().unlock();
