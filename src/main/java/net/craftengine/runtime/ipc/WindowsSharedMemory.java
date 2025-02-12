@@ -11,13 +11,11 @@ public class WindowsSharedMemory {
 
     public WindowsSharedMemory(String name, int size) {
         hMap = Kernel32.INSTANCE.CreateFileMappingA(Pointer.NULL, Pointer.NULL, PAGE_READWRITE, 0, size, name);
-
         if (hMap == null) {
             throw new RuntimeException("CreateFileMapping failed!");
         }
 
         ptr = Kernel32.INSTANCE.MapViewOfFile(hMap, FILE_MAP_ALL_ACCESS, 0, 0, size);
-
         if (ptr == null) {
             throw new RuntimeException("MapViewOfFile failed!");
         }

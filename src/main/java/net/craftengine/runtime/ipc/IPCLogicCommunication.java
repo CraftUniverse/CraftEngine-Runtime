@@ -1,5 +1,6 @@
 package net.craftengine.runtime.ipc;
 
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,7 +8,8 @@ public class IPCLogicCommunication {
     private static final Logger log = LoggerFactory.getLogger(IPCLogicCommunication.class);
     private static METHOD METHOD;
 
-    private static WindowsSharedMemory windowsSharedMemory = null;
+    private static @Nullable WindowsSharedMemory windowsSharedMemory;
+    private static @Nullable PosixSharedMemory posixSharedMemory;
 
     public static void init() {
         String os = System.getProperty("os.name").toLowerCase();
@@ -22,6 +24,10 @@ public class IPCLogicCommunication {
         } else { // Linux & macOS
             log.info("Enabling \"shm_open()\" (POSIX) IPC Communication");
             METHOD = IPCLogicCommunication.METHOD.SHM_OPEN_POSIX;
+
+            posixSharedMemory = new PosixSharedMemory("CELogic", 1024);
+
+            log.info("Created shared memory: {}", posixSharedMemory.ptr());
         }
     }
 
