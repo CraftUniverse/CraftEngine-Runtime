@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 public class Runtime {
     public static int MINECRAFT_PORT = 25565;
-    public static int LOGIC_PORT = 48528;
     public static boolean OFFLINE_MODE = false;
     public static String SHM_NAME = "CELogic";
     public static int SHM_SIZE = 1024;
@@ -21,10 +20,21 @@ public class Runtime {
 
         // Parse command line arguments
         for (var arg : args) {
-            if (arg.equalsIgnoreCase("--minecraft_port") || arg.equalsIgnoreCase("-mp")) {
+            if (arg.equalsIgnoreCase("--help") || arg.equalsIgnoreCase("-h")) {
+                System.out.println("Arguments:");
+                System.out.println("--help | -h");
+                System.out.println("    Display's this message");
+                System.out.println("--minecraft_port | -mp <int32>");
+                System.out.println("    Defines the Minecraft Server port (default: " + MINECRAFT_PORT + ")");
+                System.out.println("--offline | -o");
+                System.out.println("    Start's the Server in Offline Mode (NOT RECOMMENDED!)");
+                System.out.println("--shm_name | -shmn <string>");
+                System.out.println("    Set's the Shared Memory Name (default: " + SHM_NAME + ")");
+                System.out.println("--shm_size | -shms <int32>");
+                System.out.println("    Set's the Shared Memory Size (default: " + SHM_SIZE + ")");
+                return;
+            } else if (arg.equalsIgnoreCase("--minecraft_port") || arg.equalsIgnoreCase("-mp")) {
                 MINECRAFT_PORT = Integer.parseInt(args[argIndex + 1]);
-            } else if (arg.equalsIgnoreCase("--logic_port") || arg.equalsIgnoreCase("-lp")) {
-                LOGIC_PORT = Integer.parseInt(args[argIndex + 1]);
             } else if (arg.equalsIgnoreCase("--offline") || arg.equalsIgnoreCase("-o")) {
                 OFFLINE_MODE = true;
             } else if (arg.equalsIgnoreCase("--shm_name") || arg.equalsIgnoreCase("-shmn")) {
