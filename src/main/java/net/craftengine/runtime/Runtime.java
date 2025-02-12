@@ -11,6 +11,8 @@ public class Runtime {
     public static int MINECRAFT_PORT = 25565;
     public static int LOGIC_PORT = 48528;
     public static boolean OFFLINE_MODE = false;
+    public static String SHM_NAME = "CELogic";
+    public static int SHM_SIZE = 1024;
 
     private static Logger logger = LoggerFactory.getLogger(Runtime.class);
 
@@ -25,6 +27,10 @@ public class Runtime {
                 LOGIC_PORT = Integer.parseInt(args[argIndex + 1]);
             } else if (arg.equalsIgnoreCase("--offline") || arg.equalsIgnoreCase("-o")) {
                 OFFLINE_MODE = true;
+            } else if (arg.equalsIgnoreCase("--shm_name") || arg.equalsIgnoreCase("-shmn")) {
+                SHM_NAME = args[argIndex + 1];
+            } else if (arg.equalsIgnoreCase("--shm_size") || arg.equalsIgnoreCase("-shms")) {
+                SHM_SIZE = Integer.parseInt(args[argIndex + 1]);
             }
 
             argIndex++;

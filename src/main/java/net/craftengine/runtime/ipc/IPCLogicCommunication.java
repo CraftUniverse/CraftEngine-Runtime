@@ -1,5 +1,6 @@
 package net.craftengine.runtime.ipc;
 
+import net.craftengine.runtime.Runtime;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,14 +19,14 @@ public class IPCLogicCommunication {
             log.info("Enabling \"CreateFileMapping()\" IPC Communication");
             METHOD = IPCLogicCommunication.METHOD.CREATE_FILE_MAPPING;
 
-            windowsSharedMemory = new WindowsSharedMemory("CELogic", 1024);
+            windowsSharedMemory = new WindowsSharedMemory(Runtime.SHM_NAME, 1024);
 
             log.info("Created shared memory: {}", windowsSharedMemory.ptr());
         } else { // Linux & macOS
             log.info("Enabling \"shm_open()\" (POSIX) IPC Communication");
             METHOD = IPCLogicCommunication.METHOD.SHM_OPEN_POSIX;
 
-            posixSharedMemory = new PosixSharedMemory("CELogic", 1024);
+            posixSharedMemory = new PosixSharedMemory(Runtime.SHM_NAME, 1024);
 
             log.info("Created shared memory: {}", posixSharedMemory.ptr());
         }
