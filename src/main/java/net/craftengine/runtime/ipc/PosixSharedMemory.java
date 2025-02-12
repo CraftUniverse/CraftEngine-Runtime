@@ -12,7 +12,7 @@ public class PosixSharedMemory {
     private final ByteBuffer buffer;
 
     public PosixSharedMemory(String name, int size) {
-        SHM_NAME = name;
+        SHM_NAME = "/"+name.toLowerCase();
         SHM_SIZE = size;
 
         shmFd = PosixLibrary.INSTANCE.shm_open(SHM_NAME, 0x02 | 0x200, 0666); // O_RDWR | O_CREAT
