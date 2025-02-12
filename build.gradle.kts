@@ -20,6 +20,7 @@ dependencies {
 
     // IPC Communication
     implementation("org.msgpack:msgpack-core:0.9.9")
+    implementation("net.java.dev.jna:jna:5.16.0")
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
