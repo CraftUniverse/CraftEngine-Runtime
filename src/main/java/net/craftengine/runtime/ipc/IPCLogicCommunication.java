@@ -20,6 +20,7 @@ public class IPCLogicCommunication {
             METHOD = IPCLogicCommunication.METHOD.CREATE_FILE_MAPPING;
 
             windowsSharedMemory = new WindowsSharedMemory(Runtime.SHM_NAME, 1024);
+            windowsSharedMemory.watch();
 
             log.info("Created shared memory: {}", windowsSharedMemory.ptr());
         } else { // Linux & macOS

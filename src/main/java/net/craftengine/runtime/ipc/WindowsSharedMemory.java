@@ -1,21 +1,25 @@
 package net.craftengine.runtime.ipc;
 
 import com.sun.jna.Pointer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class WindowsSharedMemory {
     private static final int PAGE_READWRITE = 0x04;
     private static final int FILE_MAP_ALL_ACCESS = 0xF001F;
+    private static final Logger log = LoggerFactory.getLogger(WindowsSharedMemory.class);
+    private static byte[] lastData;
 
     private final String EVENT_NAME;
     private final String SHM_NAME;
     private final int SHM_SIZE;
     private final Pointer hMap;
     private final Pointer ptr;
-    private final Pointer hEvent;
     private final ByteBuffer buffer;
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
@@ -36,10 +40,7 @@ public class WindowsSharedMemory {
 
         buffer = ptr.getByteBuffer(0, SHM_SIZE);
 
-        hEvent = Kernel32.INSTANCE.CreateEventA(null, false, false, EVENT_NAME);
-        if (hEvent == null) {
-            throw new RuntimeException("CreateEvent failed");
-        }
+        lastData = new byte[SHM_SIZE];
     }
 
     public void write(byte[] data) {
@@ -54,30 +55,31 @@ public class WindowsSharedMemory {
     }
 
     public void watch() {
+        log.info("Shared Memory watcher running!");
+
         new Thread(() -> {
             while (true) {
                 try {
-                    int result = Kernel32.INSTANCE.WaitForSingleObject(hEvent, 1000) ? 0 : 1;
+                    lock.readLock().lock();
+                    buffer.position(0);
+                    byte[] data = new byte[SHM_SIZE];
+                    buffer.get(data);
 
-                    if (result == 0) {
-                        lock.readLock().lock();
-                        buffer.position(0);
-                        byte[] data = new byte[SHM_SIZE];
-                        buffer.get(data);
+                    // TODO: Handle data
 
-                        // TODO: Handle data
 
-                        lock.readLock().unlock();
+                    if (!Arrays.equals(lastData, data)) {
+                        lastData = data;
+
+                        System.out.println(Arrays.toString(data));
                     }
+
+                    lock.readLock().unlock();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             }
         }).start();
-    }
-
-    public void signalChange() {
-        Kernel32.INSTANCE.SetEvent(hEvent);
     }
 
     public Pointer ptr() {
@@ -87,7 +89,5 @@ public class WindowsSharedMemory {
     public void close() {
         Kernel32.INSTANCE.UnmapViewOfFile(ptr);
         Kernel32.INSTANCE.CloseHandle(hMap);
-        Kernel32.INSTANCE.CloseHandle(hEvent);
-        Kernel32.INSTANCE.ResetEvent(hEvent);
     }
 }
