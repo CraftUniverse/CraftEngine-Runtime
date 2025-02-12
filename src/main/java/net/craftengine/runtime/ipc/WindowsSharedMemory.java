@@ -1,6 +1,6 @@
 package net.craftengine.runtime.ipc;
 
-import com.sun.jna.*;
+import com.sun.jna.Pointer;
 
 public class WindowsSharedMemory {
     private static final int PAGE_READWRITE = 0x04;
@@ -12,7 +12,7 @@ public class WindowsSharedMemory {
     private final Pointer ptr;
 
     public WindowsSharedMemory(String name, int size) {
-        SHM_NAME = "Global\\" + name;
+        SHM_NAME = name;
         SHM_SIZE = size;
 
         hMap = Kernel32.INSTANCE.CreateFileMappingA(Pointer.NULL, Pointer.NULL, PAGE_READWRITE, 0, size, SHM_NAME);
