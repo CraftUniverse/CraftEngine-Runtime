@@ -25,13 +25,13 @@ public class Runtime {
                 System.out.println("--help | -h");
                 System.out.println("    Display's this message");
                 System.out.println("--minecraft_port | -mp <int32>");
-                System.out.println("    Defines the Minecraft Server port (default: " + MINECRAFT_PORT + ")");
+                System.out.println("    Defines the Minecraft Server port (default: 25565)");
                 System.out.println("--offline | -o");
                 System.out.println("    Start's the Server in Offline Mode (NOT RECOMMENDED!)");
                 System.out.println("--shm_name | -shmn <string>");
-                System.out.println("    Set's the Shared Memory Name (default: " + SHM_NAME + ")");
+                System.out.println("    Set's the Shared Memory Name (default: CELogic)");
                 System.out.println("--shm_size | -shms <int32>");
-                System.out.println("    Set's the Shared Memory Size (default: " + SHM_SIZE + ")");
+                System.out.println("    Set's the Shared Memory Size (default: 1024)");
                 return;
             } else if (arg.equalsIgnoreCase("--minecraft_port") || arg.equalsIgnoreCase("-mp")) {
                 MINECRAFT_PORT = Integer.parseInt(args[argIndex + 1]);
