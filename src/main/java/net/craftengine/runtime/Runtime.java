@@ -12,8 +12,6 @@ import java.io.IOException;
 public class Runtime {
     public static int MINECRAFT_PORT = 25565;
     public static boolean OFFLINE_MODE = false;
-    public static String SHM_NAME = "CELogic";
-    public static int SHM_SIZE = 1026;
 
     private static Logger logger = LoggerFactory.getLogger(Runtime.class);
 
@@ -33,16 +31,16 @@ public class Runtime {
                 System.out.println("--shm_name | -shmn <string>");
                 System.out.println("    Set's the Shared Memory Name (default: CELogic)");
                 System.out.println("--shm_size | -shms <int32>");
-                System.out.println("    Set's the Shared Memory Size (default: 1026)");
+                System.out.println("    Set's the Shared Memory Size (default: 1024)");
                 return;
             } else if (arg.equalsIgnoreCase("--minecraft_port") || arg.equalsIgnoreCase("-mp")) {
                 MINECRAFT_PORT = Integer.parseInt(args[argIndex + 1]);
             } else if (arg.equalsIgnoreCase("--offline") || arg.equalsIgnoreCase("-o")) {
                 OFFLINE_MODE = true;
             } else if (arg.equalsIgnoreCase("--shm_name") || arg.equalsIgnoreCase("-shmn")) {
-                SHM_NAME = args[argIndex + 1];
+                IPCLogicCommunication.SHM_NAME = args[argIndex + 1];
             } else if (arg.equalsIgnoreCase("--shm_size") || arg.equalsIgnoreCase("-shms")) {
-                SHM_SIZE = Integer.parseInt(args[argIndex + 1]);
+                IPCLogicCommunication.SHM_SIZE = Integer.parseInt(args[argIndex + 1]);
             }
 
             argIndex++;

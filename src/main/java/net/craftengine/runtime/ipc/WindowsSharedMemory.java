@@ -7,8 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class WindowsSharedMemory {
     private static final int PAGE_READWRITE = 0x04;
@@ -16,16 +14,13 @@ public class WindowsSharedMemory {
     private static final Logger log = LoggerFactory.getLogger(WindowsSharedMemory.class);
     private static byte[] lastData;
 
-    private final String EVENT_NAME;
     private final String SHM_NAME;
     private final int SHM_SIZE;
     private final Pointer hMap;
     private final Pointer ptr;
     private final ByteBuffer buffer;
-    private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
     public WindowsSharedMemory(String name, int size) {
-        EVENT_NAME = name + "_CreateEvent";
         SHM_NAME = name;
         SHM_SIZE = size;
 
@@ -61,7 +56,6 @@ public class WindowsSharedMemory {
         new Thread(() -> {
             while (true) {
                 try {
-                    lock.readLock().lock();
                     buffer.position(0);
                     byte[] data = new byte[SHM_SIZE];
                     buffer.get(data);
@@ -71,12 +65,16 @@ public class WindowsSharedMemory {
                     if (!Arrays.equals(lastData, data)) {
                         lastData = data;
 
-                        byte[] packedData = new byte[SHM_SIZE - 2];
+                        var dataLength = Byte.toUnsignedInt(data[0]);
+                        var dataDest = Byte.toUnsignedInt(data[1]);
+
+                        if (dataLength == 0 || dataDest != 0) {
+                            continue;
+                        }
+
+                        byte[] packedData = new byte[(SHM_SIZE - 2) / IPCLogicCommunication.SHM_QUEUE_LENGTH];
 
                         int x = 0;
-
-                        System.out.println(Arrays.toString(data));
-
                         while (x <= packedData.length - 1) {
                             packedData[x] = data[x + 2];
                             x++;
@@ -84,12 +82,18 @@ public class WindowsSharedMemory {
 
                         var unpacker = MessagePack.newDefaultUnpacker(packedData);
 
-                        System.out.println("order: " + Byte.toUnsignedInt(data[0]));
-                        System.out.println("dest: " + Byte.toUnsignedInt(data[1]));
-                        System.out.println(unpacker.unpackString());
-                    }
+                        log.info(unpacker.unpackString());
 
-                    lock.readLock().unlock();
+                        byte[] newData = new byte[SHM_SIZE];
+
+                        for (var i = IPCLogicCommunication.SHM_SIZE + 1; i < SHM_SIZE; i++) {
+                            newData[i - IPCLogicCommunication.SHM_SIZE + 1] = data[i];
+                        }
+
+                        newData[0] = (byte) (dataLength - 1);
+
+                        write(newData);
+                    }
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
