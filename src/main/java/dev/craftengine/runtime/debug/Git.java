@@ -1,4 +1,4 @@
-package net.craftengine.runtime.debug;
+package dev.craftengine.runtime.debug;
 
 public final class Git {
     private static final String COMMIT = "%COMMIT%";

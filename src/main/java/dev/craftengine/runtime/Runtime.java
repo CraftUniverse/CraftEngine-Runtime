@@ -1,7 +1,7 @@
-package net.craftengine.runtime;
+package dev.craftengine.runtime;
 
-import net.craftengine.runtime.debug.Git;
-import net.craftengine.runtime.ipc.IPCLogicCommunication;
+import dev.craftengine.runtime.debug.Git;
+import dev.craftengine.runtime.ipc.IPCLogicCommunication;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.MojangAuth;
 import org.slf4j.Logger;

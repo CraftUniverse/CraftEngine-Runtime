@@ -4,7 +4,7 @@ plugins {
     id("net.kyori.blossom") version "1.3.1"
 }
 
-group = "net.craftengine"
+group = "dev.craftengine"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -32,7 +32,7 @@ tasks.test {
 }
 
 blossom {
-    val gitFile = "src/main/java/net/craftengine/runtime/debug/Git.java"
+    val gitFile = "src/main/java/dev/craftengine/runtime/debug/Git.java"
 
     val gitCommit = System.getenv("GIT_COMMIT")
     val gitBranch = System.getenv("GIT_BRANCH")

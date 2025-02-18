@@ -1,4 +1,4 @@
-package net.craftengine.runtime.ipc;
+package dev.craftengine.runtime.ipc;
 
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package net.craftengine.runtime.ipc;
+package dev.craftengine.runtime.ipc;
 
 import com.sun.jna.Pointer;
 
