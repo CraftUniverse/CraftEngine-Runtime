@@ -1,7 +1,6 @@
 package dev.craftengine.runtime;
 
 import dev.craftengine.runtime.debug.Git;
-import dev.craftengine.runtime.ipc.IPCLogicCommunication;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.MojangAuth;
 import org.slf4j.Logger;
@@ -28,25 +27,23 @@ public class Runtime {
                 System.out.println("    Defines the Minecraft Server port (default: 25565)");
                 System.out.println("--offline | -o");
                 System.out.println("    Start's the Server in Offline Mode (NOT RECOMMENDED!)");
-                System.out.println("--shm_name | -shmn <string>");
-                System.out.println("    Set's the Shared Memory Name (default: CELogic)");
-                System.out.println("--shm_size | -shms <int32>");
-                System.out.println("    Set's the Shared Memory Size (default: 1024)");
+                System.out.println("--logic_host | -lh <string>");
+                System.out.println("    Set's the Logic TCP Server Host (default: 0.0.0.0)");
+                System.out.println("--logic_port | -lp <int32>");
+                System.out.println("    Set's the Logic TCP Server Port (default: 64111)");
                 return;
             } else if (arg.equalsIgnoreCase("--minecraft_port") || arg.equalsIgnoreCase("-mp")) {
                 MINECRAFT_PORT = Integer.parseInt(args[argIndex + 1]);
             } else if (arg.equalsIgnoreCase("--offline") || arg.equalsIgnoreCase("-o")) {
                 OFFLINE_MODE = true;
-            } else if (arg.equalsIgnoreCase("--shm_name") || arg.equalsIgnoreCase("-shmn")) {
-                IPCLogicCommunication.SHM_NAME = args[argIndex + 1];
-            } else if (arg.equalsIgnoreCase("--shm_size") || arg.equalsIgnoreCase("-shms")) {
-                IPCLogicCommunication.SHM_SIZE = Integer.parseInt(args[argIndex + 1]);
+            } else if (arg.equalsIgnoreCase("--logic_host") || arg.equalsIgnoreCase("-lh")) {
+
+            } else if (arg.equalsIgnoreCase("--logic_port") || arg.equalsIgnoreCase("-lp")) {
+
             }
 
             argIndex++;
         }
-
-        IPCLogicCommunication.init();
 
         var shortCommit = Git.commit() == null ? null : Git.commit().substring(0, 6);
 
