@@ -1,5 +1,5 @@
 <configuration>
-    <conversionRule conversionWord="highlightex" converterClass="net.craftengine.runtime.debug.LogbackHightlight"/>
+    <conversionRule conversionWord="highlightex" converterClass="dev.craftengine.runtime.debug.LogbackHightlight"/>
     <property name="ENCODER_PATTERN" value="%highlightex(%d{HH:mm:ss.SSS} %-6level %logger - %msg%n)"/>
     <timestamp key="FILENAME" datePattern="yyyy-MM-dd.HH_mm_ss"/>
     <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
