@@ -14,6 +14,7 @@ import java.io.IOException;
 
 public class Runtime {
     public static String LOGIC_HOST = "0.0.0.0";
+    public static String PROJECT_DIR = "./";
     public static int LOGIC_PORT = 64111;
     public static int MINECRAFT_PORT = 25565;
     public static boolean OFFLINE_MODE = false;
@@ -32,6 +33,8 @@ public class Runtime {
                 System.out.println("Arguments:");
                 System.out.println("--help | -h");
                 System.out.println("    Display's this message");
+                System.out.println("--project_dir | -pd <string>");
+                System.out.println("    Set's the Path to the Project (Not Recommended!) (default: ./)");
                 System.out.println("--minecraft_port | -mp <int32>");
                 System.out.println("    Defines the Minecraft Server port (default: 25565)");
                 System.out.println("--offline | -o");
@@ -42,6 +45,8 @@ public class Runtime {
                 System.out.println("    Set's the Logic TCP Server Start-Port (default: 64111)");
                 System.out.println("    from there it will be counting upwards");
                 return;
+            } else if (arg.equalsIgnoreCase("--project_dir") || arg.equalsIgnoreCase("-pd")) {
+                PROJECT_DIR = args[argIndex + 1].replaceAll("\"", "").replaceAll("'", "");
             } else if (arg.equalsIgnoreCase("--minecraft_port") || arg.equalsIgnoreCase("-mp")) {
                 MINECRAFT_PORT = Integer.parseInt(args[argIndex + 1]);
             } else if (arg.equalsIgnoreCase("--offline") || arg.equalsIgnoreCase("-o")) {
@@ -67,6 +72,7 @@ public class Runtime {
 
         var shortCommit = Git.commit() == null ? null : Git.commit().substring(0, 6);
 
+        log.info("Project Directory: {}", PROJECT_DIR);
         log.info("Server Port: {}", MINECRAFT_PORT);
         log.info("Runtime commit \"{}\" on branch \"{}\"", shortCommit, Git.branch());
         log.info("Logic Host: {} | Logic Ports: {}", LOGIC_HOST, LOGIC_PORT);
