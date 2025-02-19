@@ -17,7 +17,9 @@ public class ServerListEvent {
             var config = Runtime.GAME_CONFIG;
 
             data.setDescription(mm.deserialize(config.projectName() + " " + config.projectVersion() + " (" + config.projectBuild() + ")"));
-            data.setMaxPlayer(Runtime.GAME_CONFIG.maxPlayers());
+            data.setMaxPlayer(config.maxPlayers());
+            data.setProtocol(config.gameProtocol());
+            data.setVersion(config.gameVersion());
             data.setOnline(MinecraftServer.getConnectionManager().getOnlinePlayerCount());
 
             e.setResponseData(data);
