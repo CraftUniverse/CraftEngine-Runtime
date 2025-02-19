@@ -10,14 +10,25 @@ import java.nio.file.Path;
 public class ConfigReader {
 
     private final MessageUnpacker unpacker;
+    private final byte[] byteData;
 
     public ConfigReader(Path path) throws IOException {
-        byte[] data = Files.readAllBytes(path);
+        byte[] data = new byte[0];
+
+        if (Files.exists(path)) {
+            data = Files.readAllBytes(path);
+        }
+
+        this.byteData = data;
 
         unpacker = MessagePack.newDefaultUnpacker(data);
     }
 
     public MessageUnpacker unpacker() {
         return unpacker;
+    }
+
+    public byte[] byteData() {
+        return byteData;
     }
 }

@@ -14,9 +14,11 @@ public class ServerListEvent {
         MinecraftServer.getGlobalEventHandler().addListener(ServerListPingEvent.class, (e) -> {
             ResponseData data = new ResponseData();
 
-            data.setDescription(mm.deserialize(Runtime.GAME_CONFIG.projectName()));
+            var config = Runtime.GAME_CONFIG;
+
+            data.setDescription(mm.deserialize(config.projectName() + " " + config.projectVersion() + " (" + config.projectBuild() + ")"));
             data.setMaxPlayer(Runtime.GAME_CONFIG.maxPlayers());
-            data.setOnline(0);
+            data.setOnline(MinecraftServer.getConnectionManager().getOnlinePlayerCount());
 
             e.setResponseData(data);
         });
