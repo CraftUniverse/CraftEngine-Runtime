@@ -4,7 +4,6 @@ import dev.craftengine.runtime.configs.ConfigReader;
 import dev.craftengine.runtime.configs.records.GameConfigRecord;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.nio.file.Path;
 
 public class GameConfigReader extends ConfigReader {
@@ -14,11 +13,12 @@ public class GameConfigReader extends ConfigReader {
     public GameConfigReader() throws IOException {
         super(Path.of("gameConfig.dat"));
 
-        String projectName = unpacker().unpackString();
-        String projectVersion = unpacker().unpackString();
-        BigInteger projectBuild = unpacker().unpackBigInteger();
+        var projectName = unpacker().unpackString();
+        var projectVersion = unpacker().unpackString();
+        var projectBuild = unpacker().unpackBigInteger();
+        var maxPlayers = unpacker().unpackInt();
 
-        this.data = new GameConfigRecord(projectName, projectVersion, projectBuild);
+        this.data = new GameConfigRecord(projectName, projectVersion, projectBuild, maxPlayers);
     }
 
     public GameConfigRecord data() {

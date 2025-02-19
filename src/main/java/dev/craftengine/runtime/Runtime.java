@@ -1,5 +1,7 @@
 package dev.craftengine.runtime;
 
+import dev.craftengine.runtime.configs.readers.GameConfigReader;
+import dev.craftengine.runtime.configs.records.GameConfigRecord;
 import dev.craftengine.runtime.debug.Git;
 import dev.craftengine.runtime.ipc.TCPServer;
 import net.minestom.server.MinecraftServer;
@@ -16,8 +18,9 @@ public class Runtime {
     public static boolean OFFLINE_MODE = false;
     public static Thread TCP_THREAD;
     public static TCPServer TCP_SERVER;
+    public static GameConfigRecord GAME_CONFIG;
 
-    private static final Logger logger = LoggerFactory.getLogger(Runtime.class);
+    private static final Logger log = LoggerFactory.getLogger(Runtime.class);
 
     public static void main(String[] args) throws IOException {
         int argIndex = 0;
@@ -59,11 +62,14 @@ public class Runtime {
             }
         });
 
+        GAME_CONFIG = new GameConfigReader().data();
+
         var shortCommit = Git.commit() == null ? null : Git.commit().substring(0, 6);
 
-        logger.info("Server Port: {}", MINECRAFT_PORT);
-        logger.info("Runtime commit \"{}\" on branch \"{}\"", shortCommit, Git.branch());
-        logger.info("Logic Host: {} | Logic Ports: {}", LOGIC_HOST, LOGIC_PORT);
+        log.info("Server Port: {}", MINECRAFT_PORT);
+        log.info("Runtime commit \"{}\" on branch \"{}\"", shortCommit, Git.branch());
+        log.info("Logic Host: {} | Logic Ports: {}", LOGIC_HOST, LOGIC_PORT);
+        log.info("{} - {} - {}", GAME_CONFIG.projectName(), GAME_CONFIG.projectVersion(), GAME_CONFIG.projectBuild());
 
         MinecraftServer server = MinecraftServer.init();
 
@@ -73,10 +79,10 @@ public class Runtime {
         if (!OFFLINE_MODE) {
             MojangAuth.init();
         } else {
-            logger.warn("Server is Running in offline mode!");
+            log.warn("Server is Running in offline mode!");
         }
 
-        logger.info("Minecraft Version: {} | P: {} | D: {}", MinecraftServer.VERSION_NAME, MinecraftServer.PROTOCOL_VERSION, MinecraftServer.DATA_VERSION);
+        log.info("Minecraft Version: {} | P: {} | D: {}", MinecraftServer.VERSION_NAME, MinecraftServer.PROTOCOL_VERSION, MinecraftServer.DATA_VERSION);
 
         server.start("0.0.0.0", MINECRAFT_PORT);
         TCP_THREAD.start();
