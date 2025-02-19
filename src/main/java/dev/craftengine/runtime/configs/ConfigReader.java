@@ -1,5 +1,6 @@
 package dev.craftengine.runtime.configs;
 
+import dev.craftengine.runtime.Runtime;
 import org.msgpack.core.MessagePack;
 import org.msgpack.core.MessageUnpacker;
 
@@ -13,6 +14,8 @@ public class ConfigReader {
     private final byte[] byteData;
 
     public ConfigReader(Path path) throws IOException {
+        path = Path.of(Runtime.PROJECT_DIR, path.toString());
+
         byte[] data = new byte[0];
 
         if (Files.exists(path)) {
