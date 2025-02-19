@@ -2,9 +2,9 @@ package dev.craftengine.runtime.configs.readers;
 
 import dev.craftengine.runtime.configs.ConfigReader;
 import dev.craftengine.runtime.configs.records.GameConfigRecord;
+import dev.craftengine.runtime.configs.records.ProjectAuthor;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
@@ -15,27 +15,47 @@ public class GameConfigReader extends ConfigReader {
     public GameConfigReader() throws IOException {
         super(Path.of("gameConfig.dat"));
 
-        boolean y = byteData().length == 0;
+        var magic = byteData().length == 0 ? -1 : unpacker().unpackInt();
 
-        var projectName = y ? "no data" : unpacker().unpackString();
-        var projectVersion = y ? "no data" : unpacker().unpackString();
-        var projectBuild = y ? BigInteger.ZERO : unpacker().unpackBigInteger();
+        if (magic != 0xCE6C1) {
+            data = null;
+            return;
+        }
 
-        var projectAuthors = new ArrayList<String>();
+        var projectName = unpacker().unpackString();
+        var projectVersion = unpacker().unpackString();
+        var projectBuild = unpacker().unpackBigInteger();
 
-        // Reconstruct projectAuthor Array
+        var projectAuthors = new ArrayList<ProjectAuthor>();
+
+        // Reconstruct projectAuthor Array and Object
         {
-            var authorHeader = y ? 0 : unpacker().unpackArrayHeader();
+            var authorHeader = unpacker().unpackArrayHeader();
 
             for (var a = 0; a < authorHeader; a++) {
-                projectAuthors.add(unpacker().unpackString());
+                var x = unpacker().unpackMapHeader();
+
+                // Name
+                unpacker().unpackString();
+                String name = unpacker().unpackString();
+
+                // Website
+                unpacker().unpackString();
+                String website = unpacker().unpackString();
+
+                // E-Mail
+                unpacker().unpackString();
+                String email = unpacker().unpackString();
+
+                projectAuthors.add(new ProjectAuthor(name, website, email));
             }
         }
 
-        var gameVersion = y ? "1.21.4" : unpacker().unpackString();
-        var gameProtocol = y ? 769 : unpacker().unpackInt();
-        var maxPlayers = y ? -1 : unpacker().unpackInt();
+        var gameVersion = unpacker().unpackString();
+        var gameProtocol = unpacker().unpackInt();
+        var maxPlayers = unpacker().unpackInt();
 
+        // Creates the Data Record
         this.data = new GameConfigRecord(
                 projectName, projectVersion, projectBuild, projectAuthors,
                 gameVersion, gameProtocol, maxPlayers

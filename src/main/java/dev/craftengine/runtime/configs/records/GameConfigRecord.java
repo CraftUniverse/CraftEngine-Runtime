@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public record GameConfigRecord(String projectName,
                                String projectVersion,
                                BigInteger projectBuild,
-                               ArrayList<String> projectAuthors,
+                               ArrayList<ProjectAuthor> projectAuthors,
                                String gameVersion,
                                int gameProtocol,
                                int maxPlayers) {
