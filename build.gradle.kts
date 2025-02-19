@@ -13,6 +13,7 @@ repositories {
 
 dependencies {
     implementation("net.minestom:minestom-snapshots:96cedb1bab")
+    implementation("net.kyori:adventure-text-minimessage:4.19.0")
 
     // Logback
     implementation("ch.qos.logback:logback-core:1.5.16")

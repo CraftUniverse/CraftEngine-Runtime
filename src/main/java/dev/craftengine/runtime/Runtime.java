@@ -3,6 +3,7 @@ package dev.craftengine.runtime;
 import dev.craftengine.runtime.configs.readers.GameConfigReader;
 import dev.craftengine.runtime.configs.records.GameConfigRecord;
 import dev.craftengine.runtime.debug.Git;
+import dev.craftengine.runtime.events.ServerListEvent;
 import dev.craftengine.runtime.ipc.TCPServer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.MojangAuth;
@@ -72,6 +73,11 @@ public class Runtime {
         log.info("{} - {} - {}", GAME_CONFIG.projectName(), GAME_CONFIG.projectVersion(), GAME_CONFIG.projectBuild());
 
         MinecraftServer server = MinecraftServer.init();
+
+        // EVENTS
+        {
+            new ServerListEvent();
+        }
 
         MinecraftServer.setBrandName("CraftEngine Runtime " + shortCommit + "@" + Git.branch());
 
