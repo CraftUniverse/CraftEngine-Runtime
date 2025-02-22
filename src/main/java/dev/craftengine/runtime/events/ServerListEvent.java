@@ -21,6 +21,7 @@ public class ServerListEvent {
             data.setProtocol(config.gameProtocol());
             data.setVersion(config.gameVersion());
             data.setOnline(MinecraftServer.getConnectionManager().getOnlinePlayerCount());
+            data.setFavicon(config.serverIcon());
 
             e.setResponseData(data);
         });
