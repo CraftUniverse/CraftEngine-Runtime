@@ -2,6 +2,8 @@ package dev.craftengine.runtime.configs.readers;
 
 import dev.craftengine.runtime.configs.ConfigReader;
 import dev.craftengine.runtime.configs.records.MethodMappingRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 
 public class MeMapReader extends ConfigReader {
 
+    private final Logger log = LoggerFactory.getLogger(MeMapReader.class);
     private final ArrayList<MethodMappingRecord> data = new ArrayList<>();
 
     public MeMapReader() throws IOException {
@@ -30,6 +33,8 @@ public class MeMapReader extends ConfigReader {
 
             data.add(new MethodMappingRecord(logicServer, hash, expectReturn));
         }
+
+        log.info("Successfully read Memory Mappings. {} methods mapped.", data.size());
     }
 
     public ArrayList<MethodMappingRecord> data() {
