@@ -33,7 +33,7 @@ public class GameConfigReader extends ConfigReader {
             var authorHeader = unpacker().unpackArrayHeader();
 
             for (var a = 0; a < authorHeader; a++) {
-                var x = unpacker().unpackMapHeader();
+                unpacker().unpackMapHeader();
 
                 // Name
                 unpacker().unpackString();
