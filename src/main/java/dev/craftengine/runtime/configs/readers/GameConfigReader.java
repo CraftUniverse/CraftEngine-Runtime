@@ -55,6 +55,12 @@ public class GameConfigReader extends ConfigReader {
         var gameProtocol = unpacker().unpackInt();
         var maxPlayers = unpacker().unpackInt();
         var downloadIcon = unpacker().unpackBoolean();
+        var iconFetchInterval = -1;
+
+        if (downloadIcon) {
+            iconFetchInterval = unpacker().unpackInt();
+        }
+
         var serverIcon = unpacker().unpackString();
         var logicServers = unpacker().unpackInt();
 
@@ -62,7 +68,7 @@ public class GameConfigReader extends ConfigReader {
         this.data = new GameConfigRecord(
                 projectName, projectVersion, projectBuild, projectAuthors,
                 gameVersion, gameProtocol, maxPlayers, downloadIcon,
-                serverIcon, logicServers
+                iconFetchInterval, serverIcon, logicServers
         );
     }
 

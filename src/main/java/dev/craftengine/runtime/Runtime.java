@@ -7,6 +7,7 @@ import dev.craftengine.runtime.configs.records.MethodMappingRecord;
 import dev.craftengine.runtime.debug.Git;
 import dev.craftengine.runtime.events.ServerListEvent;
 import dev.craftengine.runtime.ipc.TCPServer;
+import dev.craftengine.runtime.misc.ServerIconHandler;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.MojangAuth;
 import org.slf4j.Logger;
@@ -83,7 +84,10 @@ public class Runtime {
         log.info("Logic Host: {} | Logic Ports: {}", LOGIC_HOST, LOGIC_PORT);
         log.info("{} - {} - {}", GAME_CONFIG.projectName(), GAME_CONFIG.projectVersion(), GAME_CONFIG.projectBuild());
 
+
         MinecraftServer server = MinecraftServer.init();
+
+        ServerIconHandler.load();
 
         // EVENTS
         {
