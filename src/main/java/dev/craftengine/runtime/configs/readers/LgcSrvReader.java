@@ -21,14 +21,13 @@ public class LgcSrvReader extends ConfigReader {
         }
 
         var portOffset = unpacker().unpackInt();
-        var language = unpacker().unpackString();
         var sdkVersion = unpacker().unpackInt();
         var hash = unpacker().unpackString();
 
         // Creates the Data Record
         this.data = new LgcSrvRecord(
-                portOffset, language,
-                sdkVersion, hash
+                portOffset, sdkVersion,
+                hash
         );
     }
 
