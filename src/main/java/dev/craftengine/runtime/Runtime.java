@@ -1,8 +1,10 @@
 package dev.craftengine.runtime;
 
 import dev.craftengine.runtime.configs.readers.GameConfigReader;
+import dev.craftengine.runtime.configs.readers.LgcSrvCFReader;
 import dev.craftengine.runtime.configs.readers.MeMapReader;
 import dev.craftengine.runtime.configs.records.GameConfigRecord;
+import dev.craftengine.runtime.configs.records.LgcSrvRecord;
 import dev.craftengine.runtime.configs.records.MethodMappingRecord;
 import dev.craftengine.runtime.debug.Git;
 import dev.craftengine.runtime.events.ServerListEvent;
@@ -26,6 +28,7 @@ public class Runtime {
     public static TCPServer TCP_SERVER;
     public static GameConfigRecord GAME_CONFIG;
     public static ArrayList<MethodMappingRecord> METHOD_MAPPINGS;
+    public static ArrayList<LgcSrvRecord> LOGIC_SERVERS;
 
     private static final Logger log = LoggerFactory.getLogger(Runtime.class);
 
@@ -73,8 +76,9 @@ public class Runtime {
             }
         });
 
-        METHOD_MAPPINGS = new MeMapReader().data();
         GAME_CONFIG = new GameConfigReader().data();
+        METHOD_MAPPINGS = new MeMapReader().data();
+        LOGIC_SERVERS = new LgcSrvCFReader().data();
 
         var shortCommit = Git.commit() == null ? null : Git.commit().substring(0, 6);
 

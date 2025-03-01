@@ -62,13 +62,12 @@ public class GameConfigReader extends ConfigReader {
         }
 
         var serverIcon = unpacker().unpackString();
-        var logicServers = unpacker().unpackInt();
 
         // Creates the Data Record
         this.data = new GameConfigRecord(
                 projectName, projectVersion, projectBuild, projectAuthors,
                 gameVersion, gameProtocol, maxPlayers, downloadIcon,
-                iconFetchInterval, serverIcon, logicServers
+                iconFetchInterval, serverIcon
         );
     }
 

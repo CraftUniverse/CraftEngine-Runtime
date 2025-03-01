@@ -23,12 +23,22 @@ public class MeMapReader extends ConfigReader {
             return;
         }
 
-        var length = unpacker().unpackInt();
+        var length = unpacker().unpackArrayHeader();
 
         // Iterates through the data
         for (int i = 0; i < length; i++) {
+            unpacker().unpackMapHeader();
+
+            // Logic Server
+            unpacker().unpackString();
             var logicServer = unpacker().unpackInt();
+
+            // Method HASH
+            unpacker().unpackString();
             var hash = unpacker().unpackString();
+
+            // Expect Return?
+            unpacker().unpackString();
             var expectReturn = unpacker().unpackBoolean();
 
             data.add(new MethodMappingRecord(logicServer, hash, expectReturn));
