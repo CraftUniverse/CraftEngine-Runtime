@@ -13,6 +13,7 @@ import dev.craftengine.runtime.events.ServerListEvent;
 import dev.craftengine.runtime.ipc.TCPServer;
 import dev.craftengine.runtime.level.LevelManager;
 import dev.craftengine.runtime.misc.ServerIconHandler;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.MojangAuth;
 import org.slf4j.Logger;
@@ -34,6 +35,7 @@ public class Runtime {
     public static ArrayList<LgcSrvRecord> LOGIC_SERVERS;
     public static boolean DEVELOPER_MODE = false;
 
+    private static final MiniMessage mm = MiniMessage.miniMessage();
     private static final Logger log = LoggerFactory.getLogger(Runtime.class);
 
     public static void main(String[] args) throws IOException {
@@ -80,6 +82,12 @@ public class Runtime {
             try {
                 TCP_SERVER = new TCPServer();
             } catch (IOException e) {
+                if (DEVELOPER_MODE) {
+                    for (var p : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+                        p.sendMessage(mm.deserialize("<dark_red>[Exception] " + TCPServer.class.getCanonicalName() + " | " + e.getMessage()));
+                    }
+                }
+
                 throw new RuntimeException(e);
             }
         });
