@@ -1,5 +1,6 @@
 package dev.craftengine.runtime;
 
+import dev.craftengine.runtime.commands.CommandManager;
 import dev.craftengine.runtime.configs.readers.GameConfigReader;
 import dev.craftengine.runtime.configs.readers.LgcSrvCFReader;
 import dev.craftengine.runtime.configs.readers.MeMapReader;
@@ -7,8 +8,10 @@ import dev.craftengine.runtime.configs.records.GameConfigRecord;
 import dev.craftengine.runtime.configs.records.LgcSrvRecord;
 import dev.craftengine.runtime.configs.records.MethodMappingRecord;
 import dev.craftengine.runtime.debug.Git;
+import dev.craftengine.runtime.events.PlayerJoinEvent;
 import dev.craftengine.runtime.events.ServerListEvent;
 import dev.craftengine.runtime.ipc.TCPServer;
+import dev.craftengine.runtime.level.LevelManager;
 import dev.craftengine.runtime.misc.ServerIconHandler;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.MojangAuth;
@@ -29,6 +32,7 @@ public class Runtime {
     public static GameConfigRecord GAME_CONFIG;
     public static ArrayList<MethodMappingRecord> METHOD_MAPPINGS;
     public static ArrayList<LgcSrvRecord> LOGIC_SERVERS;
+    public static boolean DEVELOPER_MODE = false;
 
     private static final Logger log = LoggerFactory.getLogger(Runtime.class);
 
@@ -41,6 +45,8 @@ public class Runtime {
                 System.out.println("Arguments:");
                 System.out.println("--help | -h");
                 System.out.println("    Display's this message");
+                System.out.println("--dev | -d");
+                System.out.println("    Enables developer mode");
                 System.out.println("--project_dir | -pd <string>");
                 System.out.println("    Set's the Path to the Project (Not Recommended!) (default: ./)");
                 System.out.println("--minecraft_port | -mp <int32>");
@@ -53,6 +59,8 @@ public class Runtime {
                 System.out.println("    Set's the Logic TCP Server Start-Port (default: 64111)");
                 System.out.println("    from there it will be counting upwards");
                 return;
+            } else if (arg.equalsIgnoreCase("--dev") || arg.equalsIgnoreCase("-d")) {
+                DEVELOPER_MODE = true;
             } else if (arg.equalsIgnoreCase("--project_dir") || arg.equalsIgnoreCase("-pd")) {
                 PROJECT_DIR = args[argIndex + 1].replaceAll("\"", "").replaceAll("'", "");
             } else if (arg.equalsIgnoreCase("--minecraft_port") || arg.equalsIgnoreCase("-mp")) {
@@ -88,17 +96,25 @@ public class Runtime {
         log.info("Logic Host: {} | Logic Ports: {}", LOGIC_HOST, LOGIC_PORT);
         log.info("{} - {} - {}", GAME_CONFIG.projectName(), GAME_CONFIG.projectVersion(), GAME_CONFIG.projectBuild());
 
-
         MinecraftServer server = MinecraftServer.init();
 
         ServerIconHandler.load();
+        LevelManager.initVoidWorld();
+
+        if (DEVELOPER_MODE) {
+            log.warn("Running in developer mode!");
+        }
 
         // EVENTS
         {
             new ServerListEvent();
+            new PlayerJoinEvent();
         }
 
         MinecraftServer.setBrandName("CraftEngine Runtime " + shortCommit + "@" + Git.branch());
+
+        // Initialize command manager
+        new CommandManager(MinecraftServer.getCommandManager());
 
         // Check if the application is not in offline mode
         if (!OFFLINE_MODE) {
