@@ -3,7 +3,6 @@ package dev.craftengine.runtime.events;
 import dev.craftengine.runtime.Runtime;
 import dev.craftengine.runtime.level.LevelManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.minestom.server.FeatureFlag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
@@ -33,14 +32,19 @@ public class PlayerJoinEvent {
         eventHandler.addListener(AsyncPlayerConfigurationEvent.class, (e) -> {
             e.setClearChat(true);
             e.setSpawningInstance(LevelManager.VOID_WORLD);
-
-            e.addFeatureFlag(FeatureFlag.MINECART_IMPROVEMENTS);
-            e.addFeatureFlag(FeatureFlag.REDSTONE_EXPERIMENTS);
         });
 
         eventHandler.addListener(PlayerSpawnEvent.class, (e) -> {
             final var player = e.getPlayer();
             final var levelName = player.getInstance().getTag(Tag.String("level_name"));
+
+            if (Runtime.DEVELOPER_MODE) {
+                player.sendMessage(mm.deserialize("<yellow>You are in the Developer Mode, use <click:run_command:/help>/help</click> for commands"));
+
+                if (player.getPlayerConnection().getProtocolVersion() < Runtime.GAME_CONFIG.gameProtocol()) {
+                    player.sendMessage(mm.deserialize("<red>Your client is outdated, version check is disabled by the Developer Mode"));
+                }
+            }
 
             if (levelName.equals("INTERNAL_VOID_WORLD")) {
                 player.teleport(new Pos(0, 0, 0));
