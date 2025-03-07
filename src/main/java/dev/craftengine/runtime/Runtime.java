@@ -14,6 +14,7 @@ import dev.craftengine.runtime.events.ServerListEvent;
 import dev.craftengine.runtime.ipc.TCPServer;
 import dev.craftengine.runtime.level.LevelManager;
 import dev.craftengine.runtime.misc.ServerIconHandler;
+import dev.craftengine.runtime.misc.ShutdownHook;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.MojangAuth;
@@ -80,6 +81,7 @@ public class Runtime {
             argIndex++;
         }
 
+        // Starting new Thread for the TCP Logic Servers
         TCP_THREAD = new Thread(() -> {
             try {
                 TCP_SERVER = new TCPServer();
@@ -94,6 +96,7 @@ public class Runtime {
             }
         });
 
+        // Reading Config files
         GAME_CONFIG = new GameConfigReader().data();
         METHOD_MAPPINGS = new MeMapReader().data();
         LOGIC_SERVERS = new LgcSrvCFReader().data();
@@ -136,6 +139,9 @@ public class Runtime {
         log.info("Minecraft Version: {} | P: {} | D: {}", MinecraftServer.VERSION_NAME, MinecraftServer.PROTOCOL_VERSION, MinecraftServer.DATA_VERSION);
 
         server.start("0.0.0.0", MINECRAFT_PORT);
+
+        // Adding the shutdown hook
+        java.lang.Runtime.getRuntime().addShutdownHook(new Thread(ShutdownHook::new));
 
         TCP_THREAD.start();
         consoleInput.start();

@@ -2,13 +2,11 @@ package dev.craftengine.runtime.debug;
 
 import net.minestom.server.MinecraftServer;
 
-import java.io.PrintStream;
 import java.util.Scanner;
 
 public class ConsoleInput {
     private final Thread consoleThread;
     private volatile boolean running = true;
-    private final PrintStream originalOut = System.out;
 
     public ConsoleInput() {
         consoleThread = new Thread(this::handleInput, "ConsoleInput");
