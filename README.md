@@ -18,7 +18,7 @@ The [Runtime Server](https://wiki.craftengine.dev/develop/servers/runtime-server
 - An IDE / Code Editor
     - We recommend [Jetbrains IntelliJ IDEA](https://www.jetbrains.com/idea/)
 - [Git](https://git-scm.com/)
-- [OpenJDK 22](https://openjdk.org/)
+- [OpenJDK 23](https://openjdk.org/)
   - You can install it tough **Jetbrains IntelliJ IDEA**
 - [Gradle](https://gradle.org/)
   - You can install it tough **Jetbrains IntelliJ IDEA**
