@@ -7,6 +7,7 @@ import dev.craftengine.runtime.configs.readers.MeMapReader;
 import dev.craftengine.runtime.configs.records.GameConfigRecord;
 import dev.craftengine.runtime.configs.records.LgcSrvRecord;
 import dev.craftengine.runtime.configs.records.MethodMappingRecord;
+import dev.craftengine.runtime.debug.ConsoleInput;
 import dev.craftengine.runtime.debug.Git;
 import dev.craftengine.runtime.events.PlayerJoinEvent;
 import dev.craftengine.runtime.events.ServerListEvent;
@@ -37,6 +38,7 @@ public class Runtime {
 
     private static final MiniMessage mm = MiniMessage.miniMessage();
     private static final Logger log = LoggerFactory.getLogger(Runtime.class);
+    private static final ConsoleInput consoleInput = new ConsoleInput();
 
     public static void main(String[] args) throws IOException {
         int argIndex = 0;
@@ -134,6 +136,8 @@ public class Runtime {
         log.info("Minecraft Version: {} | P: {} | D: {}", MinecraftServer.VERSION_NAME, MinecraftServer.PROTOCOL_VERSION, MinecraftServer.DATA_VERSION);
 
         server.start("0.0.0.0", MINECRAFT_PORT);
+
         TCP_THREAD.start();
+        consoleInput.start();
     }
 }
